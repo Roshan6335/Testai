@@ -15,7 +15,8 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 
 // Use default Firestore database (works outside AI Studio)
-export const db = getFirestore(app);
+const databaseId = import.meta.env.VITE_FIREBASE_DATABASE_ID;
+export const db = getFirestore(app, databaseId);
 export const auth = getAuth(app);
 export const googleProvider = new GoogleAuthProvider();
 
