@@ -1,0 +1,81 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "User profile and settings",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "displayName": { "type": "string" },
+        "email": { "type": "string" },
+        "photoURL": { "type": "string" },
+        "subscription": {
+          "type": "object",
+          "properties": {
+            "plan": { "type": "string", "enum": ["free", "pro"] },
+            "status": { "type": "string" }
+          }
+        },
+        "settings": {
+          "type": "object",
+          "properties": {
+            "theme": { "type": "string", "enum": ["light", "dark"] },
+            "compactMode": { "type": "boolean" }
+          }
+        }
+      },
+      "required": ["uid", "email"]
+    },
+    "Chat": {
+      "title": "Chat",
+      "description": "A chat session containing multiple messages",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "userId": { "type": "string" },
+        "title": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "userId", "createdAt", "updatedAt"]
+    },
+    "Message": {
+      "title": "Message",
+      "description": "An individual message in a chat",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "content": { "type": "string" },
+        "role": { "type": "string", "enum": ["user", "model"] },
+        "attachments": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "url": { "type": "string" },
+              "name": { "type": "string" },
+              "type": { "type": "string" },
+              "size": { "type": "number" }
+            }
+          }
+        },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["content", "role", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "User profiles"
+    },
+    "/users/{userId}/chats/{chatId}": {
+      "schema": "Chat",
+      "description": "User chat sessions"
+    },
+    "/users/{userId}/chats/{chatId}/messages/{messageId}": {
+      "schema": "Message",
+      "description": "Messages within a chat session"
+    }
+  }
+}
