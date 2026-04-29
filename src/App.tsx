@@ -46,12 +46,19 @@ export default function App() {
         await getDocFromServer(doc(db, 'test', 'connection'));
         setIsOnline(true);
       } catch (error: any) {
-        if (error.message?.includes('the client is offline') || error.code === 'unavailable') {
-          console.warn("Firestore is currently offline or unreachable. Retrying...");
-          setIsOnline(false);
-        }
-      }
-    }
+  if (error.code === 'not-found' || error.message?.includes('not found')) {
+    console.error('Firestore DB not found — check VITE_FIREBASE_DATABASE_ID env var:', error.message);
+    setIsOnline(true); // config error, not a network error — don't show the banner
+  } else if (error.code === 'permission-denied') {
+    setIsOnline(true); // connected fine, rules just block the test doc — expected
+  } else if (error.message?.includes('the client is offline') || error.code === 'unavailable') {
+    console.warn('Firestore offline.');
+    setIsOnline(false);
+  } else {
+    console.error('Firestore test failed:', error.code, error.message);
+    setIsOnline(true);
+  }
+}
     testConnection();
   }, []);
 
