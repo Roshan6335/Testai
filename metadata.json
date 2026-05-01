@@ -1,0 +1,6 @@
+{
+  "name": "Keryo AI",
+  "description": "A minimalist, high-performance AI chatbot with a sleek 3D landing page and compact chat interface.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["AI Chat", "3D Graphics", "User History"]
+}
